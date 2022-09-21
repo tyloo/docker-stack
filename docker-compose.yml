@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+    postgres:
+        image: postgres:${POSTGRES_VERSION:-alpine}
+        container_name: 'postgres'
+        restart: always
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB:-faume}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-faume}
+            POSTGRES_USER: ${POSTGRES_USER:-faume}
+        ports:
+            - 5432:5432
+        volumes:
+            - ./.volumes/postgres/data/:/var/lib/postgresql/data/:rw
+
+    mysql:
+        image: mysql:${MYSQL_VERSION:-8.0}
+        container_name: 'mysql'
+        restart: always
+        command: --default-authentication-plugin=mysql_native_password
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+            MYSQL_ROOT_HOST: '@'
+        ports:
+            - 3306:3306
+        volumes:
+            - ./.volumes/mysql/data/:/var/lib/postgresql/data/:rw
+
+    redis:
+        image: redis:${POSTGRES_VERSION:-alpine}
+        container_name: 'redis'
+        restart: always
+        ports:
+            - 6379:6379
+  
+    rabbitmq:
+        image: rabbitmq:management-alpine
+        container_name: 'rabbitmq'
+        restart: always
+        ports:
+            - 5672:5672
+            - 15672:15672
+        volumes:
+            - ./.volumes/rabbitmq/data/:/var/lib/rabbitmq/mnesia/:rw
