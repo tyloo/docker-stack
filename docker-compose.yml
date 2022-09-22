@@ -3,7 +3,7 @@ version: "3.8"
 services:
     postgres:
         image: postgres:${POSTGRES_VERSION:-alpine}
-        container_name: 'postgres'
+        container_name: postgres
         restart: always
         environment:
             POSTGRES_DB: ${POSTGRES_DB:-faume}
@@ -14,29 +14,26 @@ services:
         volumes:
             - ./.volumes/postgres/data/:/var/lib/postgresql/data/:rw
 
-    mysql:
-        image: mysql:${MYSQL_VERSION:-8.0}
-        container_name: 'mysql'
-        restart: always
-        command: --default-authentication-plugin=mysql_native_password
+    mariadb:
+        image: mariadb:${MARIADB_VERSION:-latest}
+        container_name: mariadb
         environment:
-            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
-            MYSQL_ROOT_HOST: '@'
+            MARIADB_ROOT_PASSWORD: root
         ports:
             - 3306:3306
         volumes:
-            - ./.volumes/mysql/data/:/var/lib/postgresql/data/:rw
+            - ./.volumes/mariadb/:/var/lib/mysql/:rw
 
     redis:
         image: redis:${POSTGRES_VERSION:-alpine}
-        container_name: 'redis'
+        container_name: redis
         restart: always
         ports:
             - 6379:6379
   
     rabbitmq:
-        image: rabbitmq:management-alpine
-        container_name: 'rabbitmq'
+        image: rabbitmq:${RABBITMQ_VERSION:-management-alpine}
+        container_name: rabbitmq
         restart: always
         ports:
             - 5672:5672
