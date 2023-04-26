@@ -1,19 +1,6 @@
 version: "3.8"
 
 services:
-    postgres:
-        image: postgres:${POSTGRES_VERSION:-alpine}
-        container_name: postgres
-        restart: always
-        environment:
-            POSTGRES_DB: ${POSTGRES_DB:-faume}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-faume}
-            POSTGRES_USER: ${POSTGRES_USER:-faume}
-        ports:
-            - 5432:5432
-        volumes:
-            - ./.volumes/postgres/data/:/var/lib/postgresql/data/:rw
-
     mariadb:
         image: mariadb:${MARIADB_VERSION:-latest}
         container_name: mariadb
