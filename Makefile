@@ -12,8 +12,8 @@ help: ## Output this help screen
 
 ## —— Docker 🐳 ————————————————————————————————————————————————————————————————
 start: ## Build and start the docker hub
-	@$(DOCKER_COMPOSE) up --force-recreate --remove-orphans --build --pull --no-cache -d
-	@$(DOCKER) image prune -f
+	@$(DOCKER_COMPOSE) build --no-cache
+	@$(DOCKER_COMPOSE) up --pull --wait --detach
 
 stop: ## Stop the docker hub
 	@$(DOCKER_COMPOSE) down --remove-orphans
