@@ -3,13 +3,17 @@ version: "3.8"
 services:
     mariadb:
         ports:
-            - 3306:3306
+            - "3306:3306"
 
     redis:
         ports:
-            - 6379:6379
+            - "6379:6379"
 
     rabbitmq:
         ports:
-            - 5672:5672
-            - 15672:15672
+            - "5672:5672"
+            - "15672:15672"
+
+    meilisearch:
+        ports:
+            - "7700:7700"

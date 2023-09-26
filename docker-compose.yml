@@ -1,29 +1,32 @@
 version: "3.8"
 
 services:
-    mariadb:
-        image: mariadb:${MARIADB_VERSION:-latest}
-        container_name: mariadb
+    db:
+        image: mysql:${MYSQL_VERSION:-8.0}
         environment:
-            MARIADB_ROOT_PASSWORD: root
+            MYSQL_ROOT_PASSWORD: root
         ports:
-            - 3306:3306
+            - "3306:3306"
         volumes:
-            - ./.volumes/mariadb/:/var/lib/mysql/:rw
+            - ./.volumes/db:/var/lib/mysql:rw
 
     redis:
-        image: redis:${POSTGRES_VERSION:-alpine}
-        container_name: redis
-        restart: always
+        image: redis:${REDIS_VERSION:-alpine}
         ports:
-            - 6379:6379
+            - "6379:6379"
   
     rabbitmq:
         image: rabbitmq:${RABBITMQ_VERSION:-management-alpine}
-        container_name: rabbitmq
-        restart: always
         ports:
-            - 5672:5672
-            - 15672:15672
+            - "5672:5672"
+            - "15672:15672"
         volumes:
             - ./.volumes/rabbitmq/data/:/var/lib/rabbitmq/mnesia/:rw
+
+    meilisearch:
+        image: getmeili/meilisearch:${MEILI_VERSION:-v1.4}
+        ports:
+            - "7700:7700"
+        volumes:
+            - ./.volumes/meilisearch/meili_data:/meili_data:rw
+            - ./meilisearch/config.toml:/meili_data/config.toml:rw
