@@ -23,6 +23,15 @@ services:
         volumes:
             - ./.volumes/rabbitmq/data/:/var/lib/rabbitmq/mnesia/:rw
 
+    mailhog:
+        image: mailhog/mailhog
+        platform: linux/amd64
+        logging:
+            driver: 'none'
+        ports:
+            - "1025:1025"
+            - "8025:8025"
+
     meilisearch:
         image: getmeili/meilisearch:${MEILI_VERSION:-v1.4}
         ports:
