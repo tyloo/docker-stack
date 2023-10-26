@@ -15,7 +15,7 @@ build: ## Build the docker hub
 	@$(DOCKER_COMPOSE) build --no-cache
 
 start: build ## Build and start the docker hub
-	@$(DOCKER_COMPOSE) up --pull --wait --detach
+	@$(DOCKER_COMPOSE) up --pull="always" --wait --detach
 
 stop: ## Stop the docker hub
 	@$(DOCKER_COMPOSE) down --remove-orphans
