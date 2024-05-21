@@ -1,9 +1,11 @@
-version: "3.8"
-
 services:
-    db:
+    mysql:
         ports:
             - "3306:3306"
+
+    postgres:
+        ports:
+            - "5432:5432"
 
     redis:
         ports:

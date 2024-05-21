@@ -1,20 +1,29 @@
-version: "3.8"
-
 services:
-    db:
+    mysql:
         image: mysql:${MYSQL_VERSION:-8.0}
         environment:
             MYSQL_ROOT_PASSWORD: root
         ports:
             - "3306:3306"
         volumes:
-            - ./.volumes/db:/var/lib/mysql:rw
+            - ./.volumes/mysql:/var/lib/mysql:rw
 
+    postgres:
+        image: postgres:${POSTGRES_VERSION:-16}-alpine
+        environment:
+          - POSTGRES_DB=${POSTGRES_DB:-faume}
+          - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-faume}
+          - POSTGRES_USER=${POSTGRES_USER:-faume}
+        ports:
+            - "5432:5432"
+        volumes:
+          - ./.volumes/postgresql:/var/lib/postgresql/data
+    
     redis:
         image: redis:${REDIS_VERSION:-alpine}
         ports:
             - "6379:6379"
-  
+
     rabbitmq:
         image: rabbitmq:${RABBITMQ_VERSION:-management-alpine}
         ports:
