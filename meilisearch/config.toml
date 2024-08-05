@@ -33,11 +33,11 @@ log_level = "INFO"
 
 # Sets the maximum amount of RAM Meilisearch can use when indexing.
 # https://www.meilisearch.com/docs/learn/configuration/instance_options#max-indexing-memory
-max_indexing_memory = "2 GiB"
+# max_indexing_memory = "2 GiB"
 
 # Sets the maximum number of threads Meilisearch can use during indexing.
 # https://www.meilisearch.com/docs/learn/configuration/instance_options#max-indexing-threads
-max_indexing_threads = 4
+# max_indexing_threads = 4
 
 #############
 ### DUMPS ###
@@ -129,3 +129,6 @@ experimental_enable_metrics = false
 
 # Experimental RAM reduction during indexing, do not use in production, see: <https://github.com/meilisearch/product/discussions/652>
 experimental_reduce_indexing_memory_usage = false
+
+# Experimentally reduces the maximum number of tasks that will be processed at once, see: <https://github.com/orgs/meilisearch/discussions/713>
+# experimental_max_number_of_batched_tasks = 100
