@@ -6,7 +6,7 @@ services:
     postgres:
         ports:
             - "5432:5432"
-
+    
     redis:
         ports:
             - "6379:6379"
@@ -16,11 +16,7 @@ services:
             - "5672:5672"
             - "15672:15672"
 
-    mailhog:
+    mailer:
         ports:
             - "1025:1025"
             - "8025:8025"
-
-    meilisearch:
-        ports:
-            - "7700:7700"

@@ -1,53 +1,48 @@
 services:
     mysql:
-        image: mysql:${MYSQL_VERSION:-8}
+        image: mysql:${MYSQL_VERSION:-8.4.6}
         environment:
-            MYSQL_ROOT_PASSWORD: root
-        ports:
-            - "3306:3306"
+            MYSQL_DATABASE: ${MYSQL_DATABASE:-prestashop}
+            MYSQL_RANDOM_ROOT_PASSWORD: "true"
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD:-prestashop}
+            MYSQL_USER: ${MYSQL_USER:-prestashop}
+        healthcheck:
+            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+            timeout: 5s
+            retries: 5
+            start_period: 60s
         volumes:
             - ./.volumes/mysql:/var/lib/mysql:rw
 
     postgres:
-        image: postgres:${POSTGRES_VERSION:-16}-alpine
+        image: postgres:${POSTGRES_VERSION:-17.6}-alpine
         environment:
-          - POSTGRES_DB=${POSTGRES_DB:-faume}
-          - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-faume}
-          - POSTGRES_USER=${POSTGRES_USER:-faume}
-        ports:
-            - "5432:5432"
+            POSTGRES_DB: ${POSTGRES_DB:-prestashop}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-prestashop}
+            POSTGRES_USER: ${POSTGRES_USER:-prestashop}
+        healthcheck:
+            test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB:-prestashop}", "-U", "${POSTGRES_USER:-prestashop}"]
+            timeout: 5s
+            retries: 5
+            start_period: 60s
         volumes:
-          - ./.volumes/postgresql:/var/lib/postgresql/data
+            - ./.volumes/postgresql:/var/lib/postgresql/data
     
     redis:
-        image: redis:${REDIS_VERSION:-alpine}
-        ports:
-            - "6379:6379"
+        image: redis:${REDIS_VERSION:-8.2.1}-alpine
+        healthcheck:
+            test: ["CMD", "redis-cli", "ping"]
+            timeout: 5s
+            retries: 5
+            start_period: 60s
 
     rabbitmq:
-        image: rabbitmq:${RABBITMQ_VERSION:-management-alpine}
-        ports:
-            - "5672:5672"
-            - "15672:15672"
+        image: rabbitmq:${RABBITMQ_VERSION:-4.1.4}-management-alpine
         volumes:
             - ./.volumes/rabbitmq/data/:/var/lib/rabbitmq/mnesia/:rw
 
-    mailhog:
-        image: mailhog/mailhog
-        platform: linux/amd64
-        logging:
-            driver: 'none'
-        ports:
-            - "1025:1025"
-            - "8025:8025"
-
-    meilisearch:
-        image: getmeili/meilisearch:${MEILI_VERSION:-v1.9}
-        ports:
-            - "7700:7700"
-        volumes:
-            - ./.volumes/meilisearch:/meili_data:rw
-            - ./meilisearch/config.toml:/meili_data/config.toml:rw
+    mailer:
+        image: axllent/mailpit:${MAILPIT_VERSION:-v1.27}
         environment:
-            MEILI_CONFIG_FILE_PATH: "${MEILI_CONFIG_FILE_PATH:-./config.toml}"
-            MEILI_MASTER_KEY: "${MEILI_MASTER_KEY:-masterKey}"
+            MP_SMTP_AUTH_ACCEPT_ANY: 1
+            MP_SMTP_AUTH_ALLOW_INSECURE: 1
