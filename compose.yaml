@@ -1,11 +1,11 @@
 services:
     mysql:
-        image: mysql:${MYSQL_VERSION:-8.4.6}
+        image: mysql:${MYSQL_VERSION:-8.4}
         environment:
-            MYSQL_DATABASE: ${MYSQL_DATABASE:-prestashop}
+            MYSQL_DATABASE: ${MYSQL_DATABASE:-eneba}
             MYSQL_RANDOM_ROOT_PASSWORD: "true"
-            MYSQL_PASSWORD: ${MYSQL_PASSWORD:-prestashop}
-            MYSQL_USER: ${MYSQL_USER:-prestashop}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD:-eneba}
+            MYSQL_USER: ${MYSQL_USER:-eneba}
         healthcheck:
             test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
             timeout: 5s
@@ -15,13 +15,13 @@ services:
             - ./.volumes/mysql:/var/lib/mysql:rw
 
     postgres:
-        image: postgres:${POSTGRES_VERSION:-17.6}-alpine
+        image: postgres:${POSTGRES_VERSION:-17.9}-alpine
         environment:
-            POSTGRES_DB: ${POSTGRES_DB:-prestashop}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-prestashop}
-            POSTGRES_USER: ${POSTGRES_USER:-prestashop}
+            POSTGRES_DB: ${POSTGRES_DB:-eneba}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-eneba}
+            POSTGRES_USER: ${POSTGRES_USER:-eneba}
         healthcheck:
-            test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB:-prestashop}", "-U", "${POSTGRES_USER:-prestashop}"]
+            test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB:-eneba}", "-U", "${POSTGRES_USER:-prestashop}"]
             timeout: 5s
             retries: 5
             start_period: 60s
@@ -29,7 +29,7 @@ services:
             - ./.volumes/postgresql:/var/lib/postgresql/data
     
     redis:
-        image: redis:${REDIS_VERSION:-8.2.1}-alpine
+        image: redis:${REDIS_VERSION:-8.6}-alpine
         healthcheck:
             test: ["CMD", "redis-cli", "ping"]
             timeout: 5s
@@ -37,12 +37,12 @@ services:
             start_period: 60s
 
     rabbitmq:
-        image: rabbitmq:${RABBITMQ_VERSION:-4.1.4}-management-alpine
+        image: rabbitmq:${RABBITMQ_VERSION:-4.2}-management-alpine
         volumes:
             - ./.volumes/rabbitmq/data/:/var/lib/rabbitmq/mnesia/:rw
 
     mailer:
-        image: axllent/mailpit:${MAILPIT_VERSION:-v1.27}
+        image: axllent/mailpit:${MAILPIT_VERSION:-v1.29}
         environment:
             MP_SMTP_AUTH_ACCEPT_ANY: 1
             MP_SMTP_AUTH_ALLOW_INSECURE: 1
